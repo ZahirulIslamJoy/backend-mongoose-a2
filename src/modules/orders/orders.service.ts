@@ -6,13 +6,18 @@ const addOrderToDB= async (order:Orders)=>{
     return result;
 }
 
-const getOrderFromDB= async ()=>{
-    const result = await OrderModel.find();
-    return result;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const getOrderFromDB= async (email:any)=>{
+    if(email){
+        const result = await OrderModel.find({email:email});
+        return result;
+    }
+    else{
+        const result = await OrderModel.find();
+        return result;
+    }
+    
 }
-
-
-
 
 
 export const OrderServices={
