@@ -68,9 +68,10 @@ const updateProduct = async (req: Request, res: Response) => {
         message: 'Product updated successfully!',
         data: data,
       });
-    }
-    else{
-        return res.status(404).send({ error: 'Product not found or no changes made' });
+    } else {
+      return res
+        .status(404)
+        .send({ error: 'Product not found or no changes made' });
     }
   } catch (err) {
     res.status(500).json({
@@ -81,9 +82,34 @@ const updateProduct = async (req: Request, res: Response) => {
   }
 };
 
+const deleteProduct = async (req: Request, res: Response) => {
+  const { id } = req.params;
+  try {
+    const result = await ProductServices.deleteSingleProductInDB(id);
+    if (result.deletedCount != 0) {
+      res.status(200).json({
+        success: true,
+        message: 'Product deleted successfully!',
+        data: null,
+      });
+    } else {
+      return res
+        .status(404)
+        .send({ error: 'Product not found' });
+    }
+  } catch (err) {
+    res.status(500).json({
+      success: false,
+      message: 'Something went wrong while deleting the products ',
+      erroe: err,
+    });
+  }
+};
+
 export const ProductControllers = {
   createProduct,
   getAllProducts,
   getSingleProducts,
   updateProduct,
+  deleteProduct,
 };

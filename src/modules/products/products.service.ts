@@ -23,6 +23,12 @@ const updateSingleProductInDB=async(id : string , updatedData : Products )=>{
     return {result,data};
 }
 
+const deleteSingleProductInDB=async(id : string )=>{
+    const result= await ProductModel.deleteOne({_id:id});
+    return result;
+
+}
+
 export const ProductServices={
-    addProductToDB, getAllProductsFromDB,getSpecificProductFromDB,updateSingleProductInDB
+    addProductToDB, getAllProductsFromDB,getSpecificProductFromDB,updateSingleProductInDB,deleteSingleProductInDB
 }
