@@ -1,8 +1,17 @@
 import { Request, Response } from 'express';
 import { ProductServices } from './products.service';
+import ProductValidationSchema from './products.validation';
 
 const createProduct = async (req: Request, res: Response) => {
   const product = req.body;
+  const { error } = ProductValidationSchema.validate(product);
+  if (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something Went wrong',
+      error: error.details,
+    });
+  }
   try {
     const result = await ProductServices.addProductToDB(product);
     res.status(200).json({
@@ -20,7 +29,7 @@ const createProduct = async (req: Request, res: Response) => {
 };
 
 const getAllProducts = async (req: Request, res: Response) => {
-    const {searchTerm}=req.query;
+  const { searchTerm } = req.query;
   try {
     const result = await ProductServices.getAllProductsFromDB(searchTerm);
     res.status(200).json({
@@ -58,6 +67,16 @@ const getSingleProducts = async (req: Request, res: Response) => {
 const updateProduct = async (req: Request, res: Response) => {
   const updatedData = req.body;
   const { id } = req.params;
+
+  const { error } = ProductValidationSchema.validate(updatedData);
+  if (error) {
+    res.status(500).json({
+      success: false,
+      message: 'Something Went wrong',
+      error: error.details,
+    });
+  }
+
   try {
     const { result, data } = await ProductServices.updateSingleProductInDB(
       id,
@@ -94,9 +113,7 @@ const deleteProduct = async (req: Request, res: Response) => {
         data: null,
       });
     } else {
-      return res
-        .status(404)
-        .send({ error: 'Product not found' });
+      return res.status(404).send({ error: 'Product not found' });
     }
   } catch (err) {
     res.status(500).json({
