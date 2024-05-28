@@ -9,17 +9,18 @@ const addProductToDB=async(product: Products)=>{
 
 const getAllProductsFromDB=async()=>{
     const result= await ProductModel.find();
-    return result
+    return result;
 }
 
 const getSpecificProductFromDB=async(id : string)=>{
     const result= await ProductModel.find({_id:id});
-    return result
+    return result;
 }
 
-const updateSingleProductInDB=async(id : string)=>{
-    const result= await ProductModel.updateOne({_id:id});
-    return result
+const updateSingleProductInDB=async(id : string , updatedData : Products )=>{
+    const result= await ProductModel.updateOne({_id:id}, updatedData);
+    const data=await ProductModel.find({_id:id});
+    return {result,data};
 }
 
 export const ProductServices={
