@@ -20,8 +20,9 @@ const createProduct = async (req: Request, res: Response) => {
 };
 
 const getAllProducts = async (req: Request, res: Response) => {
+    const {searchTerm}=req.query;
   try {
-    const result = await ProductServices.getAllProductsFromDB();
+    const result = await ProductServices.getAllProductsFromDB(searchTerm);
     res.status(200).json({
       success: true,
       message: 'Products fetched successfully!',
